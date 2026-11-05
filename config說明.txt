@@ -14,7 +14,10 @@ config.json 欄位說明（這份只供參考，程式不會讀取）
 
 "timezone"                    時區，不用改
 "discord_webhook_url"         預設的排名頻道網址（商品沒填自己的時使用）
-"discord_mode"                "edit" / "new" / "both"（有設 alert_webhook_url 的商品不受影響）
+"discord_mode"                "edit"：持續編輯同一則訊息（不洗版，但不會推播）
+                              "new"：有變化時發一則新的完整訊息（會推播）
+                              "both"：編輯完整訊息 + 有變化時另發簡短通知（會推播）
+                              （有設 alert_webhook_url 的商品不受影響）
 "webhook_username"            統一的機器人名稱；null = 用 Discord 裡 webhook 的名稱
 "webhook_avatar_url"          統一的機器人頭像網址；null = 用 Discord 裡 webhook 的頭像
 "title_prefix"                訊息標題前綴，例如 "【應募監控】"
@@ -25,6 +28,8 @@ config.json 欄位說明（這份只供參考，程式不會讀取）
 "line_channel_access_token"   LINE 官方帳號的 Channel access token
 "line_user_id"                你的 LINE User ID（U 開頭）
 "line_notify_recovery"        恢復正常時是否也用 LINE 通知：true / false
+"channels"                    頻道名稱對照表，例如 { "排名": "https://discord.com/api/webhooks/..." }
+                              之後商品的 webhook 欄位可以只填名稱；捷徑「新增頻道」會自動寫入
 "default"                     預設抓取頻率，例如 { "interval_minutes": 5 }（單位分鐘，可用小數）
 "schedules"                   特定時段改頻率，不用就維持 []
 "headers"                     不用改
@@ -35,8 +40,12 @@ config.json 欄位說明（這份只供參考，程式不會讀取）
 "url"                   商品網址（必填）
 "enabled"               開始監控 true；暫停 false
 "display_name"          自訂名稱，例如 "10/17 簽售"；null = 自動用頁面標題
-"initial_stock"         初始庫存數字；不知道就 null
+"initial_stock"         初始庫存數字；不知道就 null；Ktown4u 簽售填 0
+                        拆分選項時可依選項名稱分別填，例如 { "FACE TO FACE": 30, "VIDEO CALL": 50 }
 "restock_threshold"     庫存一次增加超過多少視為補貨；null = 全部算未付款回流
+"drop_threshold"        庫存一次減少超過多少視為異常（例如販售結束被歸零），不算銷量；null = 全部算銷量
+                        改了 restock_threshold 或 drop_threshold 後，執行 rebuild 商品id 重算舊紀錄
+"split_variants"        頁面上每個選項是不同活動時填 true，各選項分開計算、各自一則排名；一般商品填 false
 "discord_webhook_url"   這個商品的排名頻道網址；null = 用全域設定
 "alert_webhook_url"     這個商品的新增銷量頻道網址；null = 不分頻道
 "webhook_username"      這個商品專用的機器人名稱；null = 用全域設定
@@ -44,7 +53,7 @@ config.json 欄位說明（這份只供參考，程式不會讀取）
 "default"               這個商品的頻率，例如 { "interval_minutes": 1 }；null = 用全域
 "schedules"             這個商品專屬的加速時段；null = 用全域
 "variant_filter"        （選填）只加總含有這些字的版本，例如 ["WVS通路"]
-"qty_field"             （選填，只限微音樂等 91APP 商店）改用 "StockQty"
+"qty_field"             （選填，只限微樂客等 91APP 商店）改用 "StockQty"
 
 
 【schedules 填法】全域或商品底下都一樣

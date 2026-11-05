@@ -12,6 +12,7 @@
   "line_channel_access_token": "",
   "line_user_id": "",
   "line_notify_recovery": true,
+  "channels": {},
   "default": {
     "interval_minutes": 5
   },
@@ -28,13 +29,13 @@
       "display_name": null,
       "initial_stock": null,
       "restock_threshold": null,
+      "drop_threshold": null,
       "discord_webhook_url": null,
       "alert_webhook_url": null,
       "webhook_username": null,
       "webhook_avatar_url": null,
       "default": null,
-      "schedules": null,
-      "drop_threshold": null
+      "schedules": null
     },
     {
       "url": "",
@@ -44,14 +45,13 @@
       "display_name": null,
       "initial_stock": null,
       "restock_threshold": null,
+      "drop_threshold": null,
       "discord_webhook_url": null,
       "alert_webhook_url": null,
       "webhook_username": null,
       "webhook_avatar_url": null,
       "default": null,
-      "schedules": null,
-      "drop_threshold": null
+      "schedules": null
     }
-  ],
-  "channels": {}
+  ]
 }

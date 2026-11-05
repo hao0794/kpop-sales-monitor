@@ -12,6 +12,7 @@
   python sales_monitor.py run                           開始持續監控（預設指令）
   python sales_monitor.py once                          所有商品各抓一次
   python sales_monitor.py rebuild <id>                  用原始紀錄 + 目前設定重算銷量與排名
+  python sales_monitor.py sc start | stop | status      背景啟動／停止／查看狀態（和 iOS 捷徑共用）
 
 config.json 每輪重新讀取：監控執行中新增商品、改名稱、改頻率都會自動生效。
 每次抓到的原始庫存都存在 data/<id>/raw.csv，之後改設定可用 rebuild 重算。
@@ -225,7 +226,7 @@ def load_91app_meta(cfg, product, session):
 
 
 def fetch_91app(cfg, product, session):
-    """91APP 架設的商店（例如微音樂）：向庫存 API 取得真實可售數量"""
+    """91APP 架設的商店（例如微樂客）：向庫存 API 取得真實可售數量"""
     url = product["url"]
     meta = _META_CACHE.get(url)
     if meta is None:
@@ -513,14 +514,14 @@ def fit(lines, limit=4000):
 
 def build_embeds(cfg, product, state):
     n = int(setting(cfg, product, "ranking_count", 80))
-    m = int(setting(cfg, product, "unpaid_ranking_count", 50))
+    m = int(setting(cfg, product, "unpaid_ranking_count", 80))
     name = display_name(cfg, product, state)
     footer = {"text": f"更新時間 | {state['last_time']}"}
 
     main = [
         f"總銷量: {total_sold(state, product)}",
         f"新增銷量: {state['last_delta']}",
-        f"未付款回留紀錄: {state['last_returned']}",
+        f"未付款回流紀錄: {state['last_returned']}",
     ]
     if setting(cfg, product, "show_inventory", True):
         main.append(f"剩餘庫存: {state['last_inventory']}")
@@ -536,7 +537,7 @@ def build_embeds(cfg, product, state):
     return [
         {"title": f"{setting(cfg, product, 'title_prefix', '')}{name}"[:256],
          "description": fit(main), "color": 0xFFFFFF, "footer": footer},
-        {"title": f"💰 前{m}名未付款回留紀錄",
+        {"title": f"💰 前{m}名未付款回流紀錄",
          "description": fit(unpaid), "color": 0xFFE500, "footer": footer},
     ]
 
@@ -689,7 +690,7 @@ def process_reading(cfg, product, inventory, variants, title, ts, session):
         amount = state["drops"][-1]["amount"]
         send_line(cfg, f"⚠️ {product_label(product)}\n庫存一次減少 {amount}（{state['last_time']}），"
                        f"超過異常下降門檻，沒有算進銷量。\n如果其實是真的賣出，請調高門檻後執行 rebuild。", session)
-    log.info("[%s] 剩餘 %s → 總銷量 %s，新增 %s，回留 %s",
+    log.info("[%s] 剩餘 %s → 總銷量 %s，新增 %s，回流 %s",
              pid, inventory, total_sold(state, product), delta, returned)
     send_discord(cfg, product, state, session, changed=first or delta > 0 or returned > 0)
     save_json(state_path(pid), state)  # 存 message_id
