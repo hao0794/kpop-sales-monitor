@@ -79,7 +79,7 @@ cp config.example.json config.json   # 填入自己的 Discord webhook、LINE to
 | `python sales_monitor.py test-line` | 測試 LINE 通知 |
 | `python sales_monitor.py sc start / stop / status` | 背景啟動、停止、查看狀態（iOS 捷徑使用） |
 
-參數說明見 [`docs/參數說明.html`](docs/參數說明.html) 與 [`docs/config說明.txt`](docs/config說明.txt)，遠端操作方式見 [`docs/遠端執行監控.txt`](docs/遠端執行監控.txt)。
+參數說明見 [`參數說明.html`](參數說明.html) 與 [`config說明.txt`](config說明.txt)，遠端操作方式見 [`遠端執行監控.txt`](遠端執行監控.txt)。
 
 ## 使用技術
 
