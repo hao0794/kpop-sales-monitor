@@ -1,0 +1,69 @@
+config.json 欄位說明（這份只供參考，程式不會讀取）
+==================================================
+
+填寫規則
+  文字 → 放在引號內        "url": "https://..."
+  數字 → 不加引號          "ranking_count": 80
+  開關 → true / false      "enabled": true
+  不設定 → null            "initial_stock": null
+  逗號 → 每行結尾的逗號不要刪；區塊最後一行後面不加逗號
+  config.json 裡不能寫註解（中文說明只能放在這份檔案）
+
+
+【全域設定】所有商品共用，商品沒有自己設定時就用這裡的
+
+"timezone"                    時區，不用改
+"discord_webhook_url"         預設的排名頻道網址（商品沒填自己的時使用）
+"discord_mode"                "edit" / "new" / "both"（有設 alert_webhook_url 的商品不受影響）
+"webhook_username"            統一的機器人名稱；null = 用 Discord 裡 webhook 的名稱
+"webhook_avatar_url"          統一的機器人頭像網址；null = 用 Discord 裡 webhook 的頭像
+"title_prefix"                訊息標題前綴，例如 "【應募監控】"
+"show_inventory"              Discord 是否顯示剩餘庫存：true / false
+"ranking_count"               銷量排名顯示幾名（數字）
+"unpaid_ranking_count"        未付款回流排名顯示幾名（數字）
+"alert_after_failures"        連續失敗幾次後發 LINE 警告（數字）
+"line_channel_access_token"   LINE 官方帳號的 Channel access token
+"line_user_id"                你的 LINE User ID（U 開頭）
+"line_notify_recovery"        恢復正常時是否也用 LINE 通知：true / false
+"default"                     預設抓取頻率，例如 { "interval_minutes": 5 }（單位分鐘，可用小數）
+"schedules"                   特定時段改頻率，不用就維持 []
+"headers"                     不用改
+
+
+【每個商品】products 裡的每一個 { }
+
+"url"                   商品網址（必填）
+"enabled"               開始監控 true；暫停 false
+"display_name"          自訂名稱，例如 "10/17 簽售"；null = 自動用頁面標題
+"initial_stock"         初始庫存數字；不知道就 null
+"restock_threshold"     庫存一次增加超過多少視為補貨；null = 全部算未付款回流
+"discord_webhook_url"   這個商品的排名頻道網址；null = 用全域設定
+"alert_webhook_url"     這個商品的新增銷量頻道網址；null = 不分頻道
+"webhook_username"      這個商品專用的機器人名稱；null = 用全域設定
+"webhook_avatar_url"    這個商品專用的機器人頭像；null = 用全域設定
+"default"               這個商品的頻率，例如 { "interval_minutes": 1 }；null = 用全域
+"schedules"             這個商品專屬的加速時段；null = 用全域
+"variant_filter"        （選填）只加總含有這些字的版本，例如 ["WVS通路"]
+"qty_field"             （選填，只限微音樂等 91APP 商店）改用 "StockQty"
+
+
+【schedules 填法】全域或商品底下都一樣
+
+"schedules": [
+  { "dates": ["2026-10-07"], "start": "21:00", "end": "24:00", "interval_minutes": 0.5 }
+]
+
+  dates             日期，月和日要補零（2026-09-29，不是 2026-9-29）；不寫 dates = 每天
+  start / end       開始、結束時間；"24:00" 代表午夜
+  interval_minutes  這段時間的頻率（分鐘）
+  多個時段 → 用逗號隔開，多寫幾組 { }
+
+
+【新增第三個以上的商品】
+
+複製一整個商品區塊（從 { 到 }），貼在最後一個 } 後面：
+    },            ← 前一個 } 後面加逗號
+    {
+      ...新商品...
+    }             ← 最後一個 } 後面不加逗號
+  ]

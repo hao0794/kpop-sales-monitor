@@ -1,0 +1,57 @@
+{
+  "timezone": "Asia/Taipei",
+  "discord_webhook_url": "",
+  "discord_mode": "edit",
+  "webhook_username": null,
+  "webhook_avatar_url": null,
+  "title_prefix": "【應募監控】",
+  "show_inventory": true,
+  "ranking_count": 80,
+  "unpaid_ranking_count": 80,
+  "alert_after_failures": 5,
+  "line_channel_access_token": "",
+  "line_user_id": "",
+  "line_notify_recovery": true,
+  "default": {
+    "interval_minutes": 5
+  },
+  "schedules": [],
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+  },
+  "products": [
+    {
+      "url": "",
+      "enabled": false,
+      "split_variants": false,
+      "variant_filter": null,
+      "display_name": null,
+      "initial_stock": null,
+      "restock_threshold": null,
+      "discord_webhook_url": null,
+      "alert_webhook_url": null,
+      "webhook_username": null,
+      "webhook_avatar_url": null,
+      "default": null,
+      "schedules": null,
+      "drop_threshold": null
+    },
+    {
+      "url": "",
+      "enabled": false,
+      "split_variants": false,
+      "variant_filter": null,
+      "display_name": null,
+      "initial_stock": null,
+      "restock_threshold": null,
+      "discord_webhook_url": null,
+      "alert_webhook_url": null,
+      "webhook_username": null,
+      "webhook_avatar_url": null,
+      "default": null,
+      "schedules": null,
+      "drop_threshold": null
+    }
+  ],
+  "channels": {}
+}

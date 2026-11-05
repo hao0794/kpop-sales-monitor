@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>參數說明</title>
+<style>
+  body { background:#1c1c1e; color:#f5f5f7; margin:0; padding:24px 16px;
+         font:15px/1.6 -apple-system,"PingFang TC","Helvetica Neue",sans-serif; }
+  main { max-width:960px; margin:auto; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  h2 { font-size:17px; margin:32px 0 8px; }
+  .support { color:#ff9f43; margin-bottom:20px; }
+  pre { background:#2c2c2e; border-radius:10px; padding:16px; margin:0;
+         font:14px/1.6 "SF Mono",Menlo,monospace; white-space:pre-wrap; word-break:break-all; }
+  .n { color:#ff9f43; }
+  .legend { font-size:13px; color:#a1a1a6; margin-bottom:16px; }
+</style></head><body><main>
+<h1>Config 格式原檔</h1>
+<div class="support">支援 K-MONSTAR、HG 韓居、Koreepop、Willmusic 微樂客、仙女樹、FANME、Ktown4u、DJB STORE</div>
+<div class="legend">白色：需要輸入或保留的內容　<span class="n">橘色：說明</span></div>
+<pre>{
+  &quot;timezone&quot;: &quot;Asia/Taipei&quot;,
+  &quot;discord_webhook_url&quot;: &quot;<span class="n">預設排名頻道網址，商品沒填自己的頻道時使用</span>&quot;,
+  &quot;discord_mode&quot;: &quot;edit&quot;<span class="n">、&quot;new&quot; 或 &quot;both&quot;；有設定 alert_webhook_url 的商品不受影響</span>,
+  &quot;webhook_username&quot;: null,
+  &quot;webhook_avatar_url&quot;: null,
+  &quot;title_prefix&quot;: &quot;<span class="n">訊息標題前綴</span>&quot;,
+  &quot;show_inventory&quot;: true<span class="n"> 顯示剩餘庫存；不顯示改成 </span>false,
+  &quot;ranking_count&quot;: <span class="n">銷量排名顯示幾名</span>,
+  &quot;unpaid_ranking_count&quot;: <span class="n">未付款回流排名顯示幾名</span>,
+  &quot;alert_after_failures&quot;: <span class="n">連續失敗幾次後發 LINE 警告</span>,
+  &quot;line_channel_access_token&quot;:   &quot;<span class="n">LINE 官方帳號的 Channel access token</span>&quot;,
+  &quot;line_user_id&quot;: &quot;<span class="n">接收通知的 LINE User ID</span>&quot;,
+  &quot;line_notify_recovery&quot;: true<span class="n"> 恢復正常時也通知；不通知改成 </span>false,
+  &quot;channels&quot;: { &quot;<span class="n">頻道名稱</span>&quot;: &quot;<span class="n">webhook 網址</span>&quot; }<span class="n">　捷徑「新增頻道」會自動寫入</span>,
+
+  &quot;default&quot;: { &quot;interval_minutes&quot;: <span class="n">多久抓取一次（分鐘）</span> },
+  &quot;schedules&quot;: [],
+  &quot;headers&quot;: {
+    &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36&quot;
+  },
+  &quot;products&quot;: [
+    {
+      &quot;url&quot;: &quot;<span class="n">商品網址</span>&quot;,
+      &quot;enabled&quot;: <span class="n">開始監控時改成</span>true<span class="n">；暫停時改成</span>false,
+      &quot;split_variants&quot;: <span class="n">頁面上每個選項是不同活動時改成 </span>true<span class="n">，各選項分開計算、各自一則排名訊息；一般商品填 </span>false,
+      &quot;variant_filter&quot;: <span class="n">只監控名稱含這些字的選項，例如 </span>[&quot;MAKESTAR－&quot;]<span class="n">；全部選項就維持 </span>null,
+      &quot;display_name&quot;: null<span class="n">　自訂名稱改成 </span>&quot;<span class="n">名稱</span>&quot;<span class="n">；維持 null 自動使用頁面標題</span>,
+      &quot;initial_stock&quot;: <span class="n">知道初始庫存時改成數字；不知道就維持 </span>null<span class="n">（Ktown4u 簽售填 </span>0<span class="n">）</span>,
+      &quot;restock_threshold&quot;: <span class="n">庫存一次增加超過多少視為補貨；維持 </span>null<span class="n"> 就全部算未付款回流</span>,
+      &quot;drop_threshold&quot;: <span class="n">庫存一次減少超過多少視為異常（例如販售結束被歸零），不算銷量；維持 </span>null<span class="n"> 就全部算銷量</span>,
+      &quot;discord_webhook_url&quot;: &quot;<span class="n">銷量排名頻道的網址</span>&quot;,
+      &quot;alert_webhook_url&quot;: &quot;<span class="n">新增銷量頻道的網址</span>&quot;,
+      &quot;webhook_username&quot;: null,
+      &quot;webhook_avatar_url&quot;: null,
+      &quot;default&quot;: <span class="n">這個商品要用不同頻率時改成 </span>{ &quot;interval_minutes&quot;: 1 }<span class="n">；維持 </span>null<span class="n"> 就沿用全域</span>,
+      &quot;schedules&quot;: <span class="n">特定時段加速；維持 </span>null<span class="n"> 就沿用全域</span>
+    },
+    {
+      &quot;url&quot;: &quot;<span class="n">商品網址</span>&quot;,
+      &quot;enabled&quot;: <span class="n">開始監控時改成</span>true<span class="n">；暫停時改成</span>false,
+      &quot;split_variants&quot;: <span class="n">頁面上每個選項是不同活動時改成 </span>true<span class="n">，各選項分開計算、各自一則排名訊息；一般商品填 </span>false,
+      &quot;variant_filter&quot;: <span class="n">只監控名稱含這些字的選項，例如 </span>[&quot;MAKESTAR－&quot;]<span class="n">；全部選項就維持 </span>null,
+      &quot;display_name&quot;: null<span class="n">　自訂名稱改成 </span>&quot;<span class="n">名稱</span>&quot;<span class="n">；維持 null 自動使用頁面標題</span>,
+      &quot;initial_stock&quot;: <span class="n">知道初始庫存時改成數字；不知道就維持 </span>null<span class="n">（Ktown4u 簽售填 </span>0<span class="n">）</span>,
+      &quot;restock_threshold&quot;: <span class="n">庫存一次增加超過多少視為補貨；維持 </span>null<span class="n"> 就全部算未付款回流</span>,
+      &quot;drop_threshold&quot;: <span class="n">庫存一次減少超過多少視為異常（例如販售結束被歸零），不算銷量；維持 </span>null<span class="n"> 就全部算銷量</span>,
+      &quot;discord_webhook_url&quot;: &quot;<span class="n">銷量排名頻道的網址</span>&quot;,
+      &quot;alert_webhook_url&quot;: &quot;<span class="n">新增銷量頻道的網址</span>&quot;,
+      &quot;webhook_username&quot;: null,
+      &quot;webhook_avatar_url&quot;: null,
+      &quot;default&quot;: <span class="n">這個商品要用不同頻率時改成 </span>{ &quot;interval_minutes&quot;: 1 }<span class="n">；維持 </span>null<span class="n"> 就沿用全域</span>,
+      &quot;schedules&quot;: <span class="n">特定時段加速；維持 </span>null<span class="n"> 就沿用全域</span>
+    }
+  ]
+}</pre>
+<h2>自定義數據</h2><pre><span class="n">config.json 裡的 </span>&quot;default&quot;: { &quot;interval_minutes&quot;: 5 }<span class="n"> 就是預設頻率，改數字即可（支援小數，例如 </span>0.5<span class="n"> = 30 秒）；schedules 裡的特定時段也是用分鐘設定</span>
+
+<span class="n">排名依購買量由多到少，筆數由 </span>ranking_count<span class="n"> 控制，想改成 50 或 100 直接改數字。數量相同時，較早購買的排前面。</span></pre>
+<h2>放很多商品但暫時不監控</h2><pre><span class="n">把 </span>&quot;enabled&quot;<span class="n"> 設成 </span>false<span class="n">，程式就會跳過它。</span>
+<span class="n">需要時把 </span>false<span class="n"> 改成 </span>true<span class="n">、存檔，幾秒內就會開始監控。停用期間，之前已記錄的資料都會保留，重新啟用後會接著記錄。</span></pre>
+<h2>排程設定：特定期間可更改抓取頻率（全域或商品底下都一樣）</h2><pre>&quot;schedules&quot;: [
+  { &quot;dates&quot;: [&quot;2026-10-07&quot;], &quot;start&quot;: &quot;21:00&quot;, &quot;end&quot;: &quot;24:00&quot;, &quot;interval_minutes&quot;: 1 }
+]
+<span class="n">日期的月、日要補零（2026-09-29，不是 2026-9-29）；&quot;24:00&quot; 代表午夜；多個時段用逗號隔開，多寫幾組 { }</span></pre>
+
+</main></body></html>

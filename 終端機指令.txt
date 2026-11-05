@@ -1,0 +1,150 @@
+Cut終端機指令
+支援K-MONSTAR、HG韓居、Koreepop、Willmusic微樂客、仙女樹、FANME、Ktown4u、DJB STORE
+
+
+最常用的完整流程
+
+進入程式資料夾
+cd ~/Documents/sales_monitor
+
+啟用環境
+source .venv/bin/activate
+
+列出所有商品
+python sales_monitor.py list
+
+確認商品庫存（可略過）
+python sales_monitor.py check "商品網址"
+
+所有啟用的商品各抓一次
+python sales_monitor.py once
+
+持續監控
+caffeinate -i python sales_monitor.py run
+
+依序執行以上指令，就是從打開終端機到開始監控的完整步驟。
+也可以改用捷徑的「▶️ 啟動監控」，或「八、背景執行」的指令，就不用一直開著終端機視窗。
+
+
+詳細流程
+每次打開終端機先輸入執行
+cd ~/Documents/sales_monitor
+source .venv/bin/activate
+
+新增商品
+python sales_monitor.py add "商品網址"
+
+開始持續監控
+caffeinate -i python sales_monitor.py run
+（這個終端機視窗不能關；螢幕可以關，但 Mac 不能闔上、不能睡眠）
+
+事後調整（config.json + 終端機，或直接用捷徑的「⚙️ 修改設定」）
+* 查看所有商品和 id：python sales_monitor.py list
+* 在 config.json 該商品底下填 display_name、initial_stock，存檔後下一輪自動生效
+* 填了 restock_threshold（補貨門檻）或 drop_threshold（異常下降門檻）後，執行 python sales_monitor.py rebuild 商品id 重算
+* 不想監控某個商品：把它的 "enabled" 改成 false
+* 截止前想加速：在 schedules 加入時段，例如截止前 3 小時改成每 1 分鐘
+* Ktown4u 簽售商品：initial_stock 填 0，總銷量才會是完整的累計張數（用捷徑新增會自動填好）
+
+停止監控
+在執行中的視窗按 Control + C。
+（如果是用捷徑或「八、背景執行」啟動的，請改用捷徑的「⏹ 停止監控」或 python sales_monitor.py sc stop）
+
+
+
+一、第一次安裝（只做一次）
+進入程式資料夾
+
+cd ~/Documents/sales_monitor
+cd 是「切換到某個資料夾」。之後所有指令都要在這個資料夾裡執行。
+建立獨立的 Python 環境
+
+python3 -m venv .venv
+在資料夾裡建立一個專屬的 Python 環境，避免和電腦上其他程式互相干擾。
+啟用環境
+
+source .venv/bin/activate
+指令列最前面出現 (.venv) 就代表成功。
+
+安裝需要的套件
+pip install -r requirements.txt
+依照 requirements.txt 安裝程式需要的工具。
+
+二、每次打開終端機都要做
+1. 進入資料夾
+cd ~/Documents/sales_monitor
+
+2. 啟用環境
+source .venv/bin/activate
+這兩行每次開新的終端機視窗或分頁都要執行，否則會出現找不到檔案或找不到套件的錯誤。
+
+三、檢查與測試
+列出所有商品
+python sales_monitor.py list
+顯示每個商品的 id、是否啟用、剩餘庫存、總銷量、最後更新時間。拆分選項的商品會在底下列出每個選項各自的 id。也能順便確認 config.json 格式沒有錯。
+
+確認商品庫存
+python sales_monitor.py check "商品網址"
+只查看，不加入監控、不留紀錄。顯示平台、各選項的庫存；不支援的網站會顯示原因。
+
+所有啟用的商品各抓一次
+python sales_monitor.py once
+只抓一次就結束，用來確認設定正確、Discord 有收到訊息。
+
+測試 LINE 失敗通知
+python sales_monitor.py test-line
+LINE 收到測試訊息就代表設定正確。
+
+四、開始監控
+持續監控
+caffeinate -i python sales_monitor.py run
+依照設定的頻率不斷抓取並更新 Discord。caffeinate -i 是防止 Mac 在執行期間進入睡眠。這個視窗要一直開著。
+同一時間只能有一個監控在跑：如果已經用捷徑啟動，這個指令會顯示「監控已經在執行中」並停止，不會重複執行。
+
+停止監控
+在正在執行監控的視窗按鍵盤：
+Control + C
+不是 Command + C，是左下角的 control 鍵。
+
+五、監控執行中，想做其他操作
+監控的視窗不要動，另外開一個分頁：
+Command + T
+開新分頁後，要先執行一次「二、每次打開終端機都要做」的兩行指令，才能執行下面的操作。
+
+加入新商品並立刻記錄起點
+python sales_monitor.py add "商品網址"
+網址前後一定要加引號。加入後，正在執行的監控幾秒內會自動接手，不用重開。
+
+加入並自訂名稱
+python sales_monitor.py add "商品網址" --name "10/17 活動名稱"
+
+用新的補貨門檻重算某個商品
+python sales_monitor.py rebuild 商品id
+在 config.json 或捷徑修改 restock_threshold、drop_threshold 之後使用。商品 id 可以從 list 查到；拆分選項的商品要用選項的 id（例如 19991a43-5287）。
+
+六、查看檔案
+
+用 VS Code 打開設定檔
+open -a "Visual Studio Code" config.json
+
+在 Finder 打開資料夾
+open .
+可以看到 data 資料夾，裡面每個商品都有自己的 raw.csv（原始紀錄）和 state.json（計算結果）。
+
+七、什麼時候要重新啟動監控
+修改了什麼	需要重開嗎
+config.json（新增商品、改頻率、改名稱等）	不用，存檔後幾秒內生效
+用 add 或捷徑加入商品、修改設定	不用
+取代新版 sales_monitor.py	要，先停止監控（Control + C、捷徑「⏹ 停止監控」或 sc stop），再重新啟動
+
+八、背景執行（和捷徑共用，終端機可以關）
+啟動監控
+python sales_monitor.py sc start
+
+查看狀態
+python sales_monitor.py sc status
+
+停止監控
+python sales_monitor.py sc stop
+
+這組指令和捷徑的「▶️ 啟動監控」「📊 查看狀態」「⏹ 停止監控」完全相同，用哪一邊啟動，都可以從另一邊查看或停止。執行紀錄會寫在資料夾裡的 run.log。
